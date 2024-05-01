@@ -6,5 +6,5 @@ import com.user.model.User;
 
 public interface UserRepo extends CrudRepository<User, String>{
 
-	
+	public User findByEmail(String email);
 }

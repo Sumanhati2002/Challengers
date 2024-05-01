@@ -12,44 +12,44 @@ import com.user.repo.UserRepo;
 import com.user.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepo userRepo;
-	
+
 	@Override
 	public UserResponce createUser(User user) {
 
-		return new UserResponce(LocalDate.now(),"sucess", userRepo.save(user));
+		return new UserResponce(LocalDate.now(), "sucess", userRepo.save(user));
 	}
 
 	@Override
 	public User getUserById(String userId) {
 
-		Optional<User> optionaluser=userRepo.findById(userId);
+		Optional<User> optionaluser = userRepo.findById(userId);
 		return optionaluser.get();
 	}
 
 	@Override
 	public List<User> getAllUsers() {
-		
+
 		return (List<User>) userRepo.findAll();
 	}
 
 	@Override
 	public User updateUser(User user) {
-		
-		User existingUser=userRepo.findById(user.getId()).get();
+
+		User existingUser = userRepo.findById(user.getId()).get();
 		existingUser.setFirstName(user.getFirstName());
 		existingUser.setLastName(user.getLastName());
 		existingUser.setEmail(user.getEmail());
-		User updateUser=userRepo.save(existingUser);
+		User updateUser = userRepo.save(existingUser);
 		return updateUser;
 	}
 
 	@Override
 	public void deleteUser(String userId) {
-		
+
 		userRepo.deleteById(userId);
 	}
 

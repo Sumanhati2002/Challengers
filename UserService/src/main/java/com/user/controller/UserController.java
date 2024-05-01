@@ -12,16 +12,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.user.generateotp.OtpGenarator;
+import com.user.model.ChangePasswordRequest;
 import com.user.model.User;
 import com.user.model.responce.UserResponce;
+import com.user.repo.UserRepo;
 import com.user.rest.RequestPath;
 import com.user.service.UserService;
 
 @RestController
 public class UserController {
+	
+	@Autowired
+	private UserRepo userRepo;
 	
 	@Autowired
 	private OtpGenarator otpgenerator;
@@ -62,6 +68,7 @@ public class UserController {
 		return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
 	}
 	
+	//send otp
 	@GetMapping("/hii")
 	public void sendOTPEmail() {
 		User user=new User();
@@ -73,4 +80,19 @@ public class UserController {
 		System.out.println(message);
 		javaMailSender.send(message);	
 	}
+	
+	//change password by taking old password
+	@PostMapping("/changepassword")
+	public  ResponseEntity<User> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+		String existingPassword=changePasswordRequest.getUser().getPassword();
+		if (existingPassword.contains(changePasswordRequest.getOldPassword())) {
+			changePasswordRequest.getUser().setPassword(changePasswordRequest.getNewPassword());
+			this.userRepo.save(changePasswordRequest.getUser());
+		}
+		else {
+			System.out.println("invalid user password");
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 }
