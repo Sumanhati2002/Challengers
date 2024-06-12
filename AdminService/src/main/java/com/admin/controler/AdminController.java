@@ -18,4 +18,8 @@ public class AdminController {
 	public AdminResponse createAdmin(@RequestBody Admin admin) {
 		return adminServiceImpl.createAdmin(admin);
 	}
+	@PostMapping(path = "/authorize-user", produces = MediaType.APPLICATION_JSON_VALUE)
+	public AdminResponse AuthorizeUsers(@RequestBody Admin admin) {
+		return adminServiceImpl.createAdmin(admin);
+	}
 }
